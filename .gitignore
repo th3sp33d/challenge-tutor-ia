@@ -1,0 +1,5 @@
+.env
+arrancador.bat
+.DS_Store
+Thumbs.db
+.vscode/
