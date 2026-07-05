@@ -15,7 +15,7 @@ services:
       - TZ=America/Santiago
       - N8N_RESTRICT_FILE_ACCESS_TO=/files
     volumes:
-      - n8n_storage:/home/node/.n8n # <-- ruta corregida
+      - n8n_storage:/home/node/.n8n
       - ../backend-n8n/documentos:/files
     depends_on:
       - qdrant
