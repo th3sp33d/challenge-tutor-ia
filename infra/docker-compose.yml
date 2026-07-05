@@ -13,9 +13,22 @@ services:
       - WEBHOOK_URL=${MY_NGROK_URL}
       - GENERIC_TIMEZONE=America/Santiago
       - TZ=America/Santiago
+      - N8N_RESTRICT_FILE_ACCESS_TO=/files
     volumes:
-      - n8n_storage:/home/node/.local/share/n8n
+      - n8n_storage:/home/node/.n8n # <-- ruta corregida
       - ../backend-n8n/documentos:/files
+    depends_on:
+      - qdrant
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: challenge_qdrant
+    restart: unless-stopped
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_storage:/qdrant/storage
 
 volumes:
   n8n_storage:
+  qdrant_storage:
