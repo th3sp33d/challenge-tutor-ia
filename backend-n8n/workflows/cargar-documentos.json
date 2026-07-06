@@ -3,17 +3,113 @@
   "nodes": [
     {
       "parameters": {
+        "chunkSize": 1500,
+        "chunkOverlap": 150,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        880
+      ],
+      "id": "501541ae-fb8d-47e9-b791-42b88c4eeb9b",
+      "name": "Text Splitter"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        192,
+        800
+      ],
+      "id": "8ce3e159-17c6-4801-a52f-1d86209edb3b",
+      "name": "Embeddings Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "9losH6MxKZTzLBc2",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -576,
+        -112
+      ],
+      "id": "fd4f4c6c-1a08-4d3b-9eae-cb2d37a93732",
+      "name": "Loop Laborales"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -576,
+        208
+      ],
+      "id": "abe804ec-51b5-42c3-9eda-900d871e9142",
+      "name": "Loop Estudios"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -576,
+        480
+      ],
+      "id": "bfbf8e3c-d82d-4bc5-b02b-2c2226001e6a",
+      "name": "Loop General"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1456,
+        256
+      ],
+      "id": "fea7dcdb-2cfd-4ef2-8da6-09696a30b70c",
+      "name": "Iniciar flujo"
+    },
+    {
+      "parameters": {
+        "fileSelector": "/files/fines_laborales/*.pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        -1056,
+        48
+      ],
+      "id": "0b6da99a-5ffd-42f2-af5e-9dd52d4a01a2",
+      "name": "Lee Los PDFs Laborales"
+    },
+    {
+      "parameters": {
         "fileSelector": "/files/continuidad_de_estudios/*.pdf",
         "options": {}
       },
       "type": "n8n-nodes-base.readWriteFile",
       "typeVersion": 1,
       "position": [
-        224,
-        80
+        -1056,
+        256
       ],
-      "id": "ef51f17a-5fb1-46a5-a52b-ccca510ed45c",
-      "name": "Leer PDFs - Continuidad Estudios"
+      "id": "41ac64e8-6349-4d64-83a1-344160b447ad",
+      "name": "Lee los PDFs  Continuidad Estudios"
     },
     {
       "parameters": {
@@ -23,11 +119,11 @@
       "type": "n8n-nodes-base.readWriteFile",
       "typeVersion": 1,
       "position": [
-        208,
-        336
+        -1056,
+        496
       ],
-      "id": "d9cc0625-c326-4ca1-9f89-cace168be13a",
-      "name": "Leer PDFs - General"
+      "id": "7490b6a5-8d37-4226-a607-27f2238c2f95",
+      "name": "Lee PDFs General"
     },
     {
       "parameters": {
@@ -37,11 +133,11 @@
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        464,
-        -128
+        -816,
+        48
       ],
-      "id": "dec02fe8-81cc-4b76-bd70-e7810acbe5ef",
-      "name": "Extraer PDF - Laborales"
+      "id": "f21a3244-6997-4938-90c2-f60df1632d41",
+      "name": "Extraer PDF  Laborales"
     },
     {
       "parameters": {
@@ -51,16 +147,11 @@
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        448,
-        80
+        -816,
+        272
       ],
-      "id": "113526f8-ecb1-4812-87f4-56b750a5eefc",
-      "name": "Extraer PDF - Estudios",
-      "executeOnce": false,
-      "alwaysOutputData": false,
-      "retryOnFail": true,
-      "maxTries": 5,
-      "waitBetweenTries": 5000
+      "id": "0dd9fc0f-b6b7-400d-b1a7-895781012a4c",
+      "name": "Extraer PDF  Estudios"
     },
     {
       "parameters": {
@@ -70,16 +161,122 @@
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        448,
-        336
+        -816,
+        496
       ],
-      "id": "02893144-271a-45d5-ab01-1520450bdd9c",
-      "name": "Extraer PDF - General"
+      "id": "f5242554-f6f4-49ed-8a81-87c65c7fd5d3",
+      "name": "Extraer PDF  General"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "qdrantCollection": {
+          "__rl": true,
+          "mode": "list",
+          "value": "fines_laborales",
+          "cachedResultName": "fines_laborales"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+      "typeVersion": 1.3,
+      "position": [
+        -144,
+        -96
+      ],
+      "id": "8d0a6b6b-2737-4248-ba08-dc41453e44fe",
+      "name": "Qdrant  Laborales",
+      "credentials": {
+        "qdrantApi": {
+          "id": "FoDqVh8Pm8nqJ58a",
+          "name": "Qdrant account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "qdrantCollection": {
+          "__rl": true,
+          "mode": "list",
+          "value": "continuidad_estudios",
+          "cachedResultName": "continuidad_estudios"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+      "typeVersion": 1.3,
+      "position": [
+        -128,
+        224
+      ],
+      "id": "69188fa3-915c-4958-91b4-2ccd6ef966cb",
+      "name": "Qdrant  Estudios",
+      "credentials": {
+        "qdrantApi": {
+          "id": "FoDqVh8Pm8nqJ58a",
+          "name": "Qdrant account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "qdrantCollection": {
+          "__rl": true,
+          "mode": "list",
+          "value": "general",
+          "cachedResultName": "general"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+      "typeVersion": 1.3,
+      "position": [
+        -128,
+        480
+      ],
+      "id": "5e5083cf-3cc3-462d-87b7-21912be8647f",
+      "name": "Qdrant  General",
+      "credentials": {
+        "qdrantApi": {
+          "id": "FoDqVh8Pm8nqJ58a",
+          "name": "Qdrant account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 15
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        192,
+        256
+      ],
+      "id": "3d8c7b05-defb-4024-ac00-e64e68fd5d05",
+      "name": "Espera Estudios",
+      "webhookId": "a0000000-0000-0000-0000-00000000wa02"
+    },
+    {
+      "parameters": {
+        "amount": 15
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        224,
+        480
+      ],
+      "id": "6b12f020-73e0-473c-bb76-9b4766dcebff",
+      "name": "Espera General",
+      "webhookId": "a0000000-0000-0000-0000-00000000wa03"
     },
     {
       "parameters": {
         "jsonMode": "expressionData",
-        "jsonData": "={{ $('Extraer PDF - Laborales').item.json.text }}",
+        "jsonData": "={{ $('Extraer PDF  Laborales').item.json.text }}",
         "textSplittingMode": "custom",
         "options": {
           "metadata": {
@@ -95,16 +292,16 @@
       "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
       "typeVersion": 1.1,
       "position": [
-        672,
-        -16
+        -400,
+        144
       ],
-      "id": "505ab2fe-c173-4377-b29d-7e16f6ff0cfc",
-      "name": "Loader - Fines Laborales"
+      "id": "7fc69d11-cb8f-4d7d-a1eb-f85ad1e73a2d",
+      "name": "Loader  Fines Laborales"
     },
     {
       "parameters": {
         "jsonMode": "expressionData",
-        "jsonData": "={{ $('Extraer PDF - Estudios').item.json.text }}",
+        "jsonData": "={{ $('Extraer PDF  Estudios').item.json.text }}",
         "textSplittingMode": "custom",
         "options": {
           "metadata": {
@@ -120,16 +317,16 @@
       "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
       "typeVersion": 1.1,
       "position": [
-        672,
-        192
+        -416,
+        336
       ],
-      "id": "f067ed36-56dd-449a-a53b-4b0001ed1a5a",
-      "name": "Loader - Continuidad Estudios"
+      "id": "638d68f9-8aaf-4ed3-928f-f0f872d5d2db",
+      "name": "Loader  Continuidad Estudios"
     },
     {
       "parameters": {
         "jsonMode": "expressionData",
-        "jsonData": "={{ $('Extraer PDF - General').item.json.text }}",
+        "jsonData": "={{ $('Extraer PDF  General').item.json.text }}",
         "textSplittingMode": "custom",
         "options": {
           "metadata": {
@@ -145,232 +342,73 @@
       "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
       "typeVersion": 1.1,
       "position": [
-        672,
-        448
+        -416,
+        688
       ],
-      "id": "a26449f1-e60f-443a-a996-cdccf11f6415",
-      "name": "Loader - General"
+      "id": "20370cec-7e0b-405f-89d0-8eaf11f8dc1f",
+      "name": "Loader General"
     },
     {
       "parameters": {
-        "chunkOverlap": 100,
-        "options": {}
+        "amount": 15
       },
-      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        176,
+        -80
+      ],
+      "id": "86d2d804-4906-437d-ac5c-d2b7c472e867",
+      "name": "Espera Laborales",
+      "webhookId": "a0000000-0000-0000-0000-00000000wa01"
+    },
+    {
+      "parameters": {
+        "content": "el splitInBatches (Loop)\nes un Dosificador de Chunks\n\n"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -976,
+        -208
+      ],
       "typeVersion": 1,
-      "position": [
-        672,
-        592
-      ],
-      "id": "2a47a031-6590-4600-927e-94f421e2c8c2",
-      "name": "Text Splitter"
-    },
-    {
-      "parameters": {
-        "mode": "insert",
-        "qdrantCollection": {
-          "__rl": true,
-          "mode": "list",
-          "value": "fines_laborales"
-        },
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
-      "typeVersion": 1.3,
-      "position": [
-        1072,
-        -128
-      ],
-      "id": "8fec230f-2760-46a3-8cce-c27a9e3adc55",
-      "name": "Qdrant - Fines Laborales",
-      "credentials": {
-        "qdrantApi": {
-          "id": "FoDqVh8Pm8nqJ58a",
-          "name": "Qdrant account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "mode": "insert",
-        "qdrantCollection": {
-          "__rl": true,
-          "mode": "list",
-          "value": "continuidad_estudios"
-        },
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
-      "typeVersion": 1.3,
-      "position": [
-        1072,
-        80
-      ],
-      "id": "797f1567-5e50-4dba-b832-372a66e40e93",
-      "name": "Qdrant - Continuidad Estudios",
-      "credentials": {
-        "qdrantApi": {
-          "id": "FoDqVh8Pm8nqJ58a",
-          "name": "Qdrant account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "mode": "insert",
-        "qdrantCollection": {
-          "__rl": true,
-          "mode": "list",
-          "value": "general"
-        },
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
-      "typeVersion": 1.3,
-      "position": [
-        1104,
-        336
-      ],
-      "id": "ecf03c97-fd56-4aaf-bed9-ee7e13bc73c9",
-      "name": "Qdrant - General",
-      "credentials": {
-        "qdrantApi": {
-          "id": "FoDqVh8Pm8nqJ58a",
-          "name": "Qdrant account"
-        }
-      }
-    },
-    {
-      "parameters": {},
-      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        976,
-        512
-      ],
-      "id": "01491a19-f422-49fa-9872-7b9fd08b6235",
-      "name": "Embeddings Google Gemini",
-      "retryOnFail": true,
-      "maxTries": 5,
-      "waitBetweenTries": 5000,
-      "credentials": {
-        "googlePalmApi": {
-          "id": "9losH6MxKZTzLBc2",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "fileSelector": "/files/fines_laborales/*.pdf",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.readWriteFile",
-      "typeVersion": 1,
-      "position": [
-        208,
-        -128
-      ],
-      "id": "fa30106e-c9cd-4485-963e-eca7b8819b10",
-      "name": "Lee los PDFs - Fines Laborales"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.manualTrigger",
-      "typeVersion": 1,
-      "position": [
-        -16,
-        80
-      ],
-      "id": "83d0ed9a-4c4e-4448-90c3-b603b048cbf4",
-      "name": "Iniciar el flujo"
+      "id": "9eefa57f-b39c-4b2d-b44e-c210090907d5",
+      "name": "Sticky Note"
     }
   ],
   "pinData": {},
   "connections": {
-    "Leer PDFs - Continuidad Estudios": {
+    "Loop Laborales": {
       "main": [
+        [],
         [
           {
-            "node": "Extraer PDF - Estudios",
+            "node": "Qdrant  Laborales",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Leer PDFs - General": {
+    "Loop Estudios": {
       "main": [
+        [],
         [
           {
-            "node": "Extraer PDF - General",
+            "node": "Qdrant  Estudios",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Extraer PDF - Laborales": {
+    "Loop General": {
       "main": [
+        [],
         [
           {
-            "node": "Qdrant - Fines Laborales",
+            "node": "Qdrant  General",
             "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Extraer PDF - Estudios": {
-      "main": [
-        [
-          {
-            "node": "Qdrant - Continuidad Estudios",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Extraer PDF - General": {
-      "main": [
-        [
-          {
-            "node": "Qdrant - General",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Loader - Fines Laborales": {
-      "ai_document": [
-        [
-          {
-            "node": "Qdrant - Fines Laborales",
-            "type": "ai_document",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Loader - Continuidad Estudios": {
-      "ai_document": [
-        [
-          {
-            "node": "Qdrant - Continuidad Estudios",
-            "type": "ai_document",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Loader - General": {
-      "ai_document": [
-        [
-          {
-            "node": "Qdrant - General",
-            "type": "ai_document",
             "index": 0
           }
         ]
@@ -380,17 +418,17 @@
       "ai_textSplitter": [
         [
           {
-            "node": "Loader - Fines Laborales",
+            "node": "Loader  Fines Laborales",
             "type": "ai_textSplitter",
             "index": 0
           },
           {
-            "node": "Loader - Continuidad Estudios",
+            "node": "Loader  Continuidad Estudios",
             "type": "ai_textSplitter",
             "index": 0
           },
           {
-            "node": "Loader - General",
+            "node": "Loader General",
             "type": "ai_textSplitter",
             "index": 0
           }
@@ -401,49 +439,203 @@
       "ai_embedding": [
         [
           {
-            "node": "Qdrant - Fines Laborales",
+            "node": "Qdrant  Laborales",
             "type": "ai_embedding",
             "index": 0
           },
           {
-            "node": "Qdrant - Continuidad Estudios",
+            "node": "Qdrant  Estudios",
             "type": "ai_embedding",
             "index": 0
           },
           {
-            "node": "Qdrant - General",
+            "node": "Qdrant  General",
             "type": "ai_embedding",
             "index": 0
           }
         ]
       ]
     },
-    "Lee los PDFs - Fines Laborales": {
+    "Iniciar flujo": {
       "main": [
         [
           {
-            "node": "Extraer PDF - Laborales",
+            "node": "Lee Los PDFs Laborales",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Lee los PDFs  Continuidad Estudios",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Lee PDFs General",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Iniciar el flujo": {
+    "Lee Los PDFs Laborales": {
       "main": [
         [
           {
-            "node": "Lee los PDFs - Fines Laborales",
+            "node": "Extraer PDF  Laborales",
             "type": "main",
             "index": 0
-          },
+          }
+        ]
+      ]
+    },
+    "Lee los PDFs  Continuidad Estudios": {
+      "main": [
+        [
           {
-            "node": "Leer PDFs - Continuidad Estudios",
+            "node": "Extraer PDF  Estudios",
             "type": "main",
             "index": 0
-          },
+          }
+        ]
+      ]
+    },
+    "Lee PDFs General": {
+      "main": [
+        [
           {
-            "node": "Leer PDFs - General",
+            "node": "Extraer PDF  General",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer PDF  Laborales": {
+      "main": [
+        [
+          {
+            "node": "Loop Laborales",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer PDF  Estudios": {
+      "main": [
+        [
+          {
+            "node": "Loop Estudios",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer PDF  General": {
+      "main": [
+        [
+          {
+            "node": "Loop General",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qdrant  Laborales": {
+      "main": [
+        [
+          {
+            "node": "Espera Laborales",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qdrant  Estudios": {
+      "main": [
+        [
+          {
+            "node": "Espera Estudios",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qdrant  General": {
+      "main": [
+        [
+          {
+            "node": "Espera General",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Espera Estudios": {
+      "main": [
+        [
+          {
+            "node": "Loop Estudios",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Espera General": {
+      "main": [
+        [
+          {
+            "node": "Loop General",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loader  Fines Laborales": {
+      "ai_document": [
+        [
+          {
+            "node": "Qdrant  Laborales",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loader  Continuidad Estudios": {
+      "ai_document": [
+        [
+          {
+            "node": "Qdrant  Estudios",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loader General": {
+      "ai_document": [
+        [
+          {
+            "node": "Qdrant  General",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Espera Laborales": {
+      "main": [
+        [
+          {
+            "node": "Loop Laborales",
             "type": "main",
             "index": 0
           }
@@ -456,11 +648,11 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "ebf0ae74-447d-43b2-8780-51c6e445387c",
+  "versionId": "86e9e85e-6c06-43ba-a759-cf01262891c3",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "30722f337168db714d2bcb5e70369b51ca932b7b864906159f4c0fc1b2f9639a"
   },
-  "id": "bPJYXHMEc0drG88O",
+  "id": "FEsrugtzEwI0dS2a",
   "tags": []
 }
