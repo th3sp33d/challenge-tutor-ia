@@ -8,10 +8,10 @@
       "type": "@n8n/n8n-nodes-langchain.chatTrigger",
       "typeVersion": 1.4,
       "position": [
-        -368,
-        -112
+        -304,
+        32
       ],
-      "id": "dc50cd18-0688-466f-8f0f-fac8ada901f1",
+      "id": "29419e82-fcc8-4238-9e9a-b1e8580dbc0f",
       "name": "When chat message received",
       "webhookId": "e7200020-c5d7-4a63-a23b-a52a2d89e1ab"
     },
@@ -23,10 +23,10 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        -336,
-        176
+        -272,
+        320
       ],
-      "id": "0d57abac-5dda-4a60-94b4-b5d5d6e0a92a",
+      "id": "dcf0f5d3-37c0-4384-98c6-927ac51c1618",
       "name": "Google Gemini Chat Model",
       "credentials": {
         "googlePalmApi": {
@@ -40,10 +40,10 @@
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.4,
       "position": [
-        -144,
-        176
+        -80,
+        320
       ],
-      "id": "f55fc591-e65a-414e-ab98-63fdc8488608",
+      "id": "8eee022a-7d14-4962-bf1b-c170b5075d7b",
       "name": "Simple Memory"
     },
     {
@@ -51,10 +51,10 @@
       "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
       "typeVersion": 1,
       "position": [
-        208,
-        336
+        272,
+        480
       ],
-      "id": "12a15e9b-fad2-4de9-b082-577875f81c17",
+      "id": "9780575d-9548-4fa1-b0b8-c32b78992643",
       "name": "Embeddings Google Gemini",
       "credentials": {
         "googlePalmApi": {
@@ -66,23 +66,23 @@
     {
       "parameters": {
         "mode": "retrieve-as-tool",
-        "toolDescription": "Utiliza esta herramienta cuando el usuario pregunte fecha de inscripción, temario y preguntas de ejemplo TODO RELACIONADO A FINES LABORALES\n\nCuando el usuario te escriba por ejemplos de preguntas para fines laborales, pregúntale cuales son sus pasatiempos, actividades, trabajo o cualquier pregunta personal NO INVASIVA que pueda tipificar al usuario con sus gustos personales y así al responder, tú le darás el ejemplo de la pregunta al usuario pero elaborada acorde a sus gustos personales.",
+        "toolDescription": "Utiliza esta herramienta cuando el usuario pregunte fecha de inscripción, temario y preguntas de ejemplo TODO RELACIONADO A FINES LABORALES\n\nCuando el usuario te escriba por ejemplos de preguntas para fines laborales, pregúntale cuales son sus pasatiempos, actividades, trabajo o cualquier pregunta personal NO INVASIVA que pueda tipificar al usuario con sus gustos personales y así al responder, tú le darás el ejemplo de la pregunta al usuario pero elaborada acorde a sus gustos personales.\n\nEsta herramienta es PRIORITARIA para el objetivo del proyecto: siempre que el usuario esté practicando para fines laborales, usa esta herramienta antes de responder, aunque ya la hayas usado antes en la conversación. Si la primera búsqueda no trae resultados útiles, intenta de nuevo con otras palabras (por ejemplo el nombre exacto de la materia o del tipo de pregunta) antes de decir que no tienes información.",
         "qdrantCollection": {
           "__rl": true,
           "value": "fines_laborales",
           "mode": "list",
           "cachedResultName": "fines_laborales"
         },
-        "topK": 5,
+        "topK": 8,
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
       "typeVersion": 1.3,
       "position": [
-        0,
-        192
+        64,
+        336
       ],
-      "id": "99207b9e-bf62-46fa-a786-dff5ba519ff4",
+      "id": "12a829be-0503-4a45-9cff-34e15570bde5",
       "name": "Qdrant  Buscar Laborales",
       "credentials": {
         "qdrantApi": {
@@ -94,21 +94,22 @@
     {
       "parameters": {
         "mode": "retrieve-as-tool",
-        "toolDescription": "Utiliza esta herramienta cuando el usuario pregunte fecha de inscripción, temario y preguntas de ejemplo TODO RELACIONADO A CONTINUIDAD DE ESTUDIOS\n\nAtento a si el usuario pregunta por ejemplos de:\n\nMatemáticas\nLenguaje y comunicación\nInglés\nCiencias Sociales\nCiencias Naturales\n\nTodas esas preguntas de ejemplo está en tu memoria. ",
+        "toolDescription": "Utiliza esta herramienta cuando el usuario pregunte fecha de inscripción, temario y preguntas de ejemplo TODO RELACIONADO A CONTINUIDAD DE ESTUDIOS\n\nAtento a si el usuario pregunta por ejemplos de:\n\nMatemáticas\nLenguaje y comunicación\nInglés\nCiencias Sociales\nCiencias Naturales\n\nTodas esas preguntas de ejemplo está en tu memoria.\n\nCuando el usuario te escriba por ejemplos de preguntas para fines de continuidad de estudios, pregúntale cuales son sus pasatiempos, actividades, trabajo o cualquier pregunta personal NO INVASIVA que pueda tipificar al usuario con sus gustos personales y así al responder, tú le darás el ejemplo de la pregunta al usuario pero elaborada acorde a sus gustos personales.\n\nEsta herramienta es PRIORITARIA para el objetivo del proyecto. Cuando el usuario pida una pregunta de una materia específica, incluye el nombre exacto de esa materia en el texto de tu búsqueda (por ejemplo: \"pregunta de ejemplo Matemáticas\") para encontrar el contenido correcto entre las 5 materias mezcladas en esta colección. Si la primera búsqueda no trae una pregunta clara de esa materia, vuelve a intentar con otra frase antes de decirle al usuario que no tienes información — nunca respondas que no tienes contenido sin haber intentado al menos dos búsquedas distintas.",
         "qdrantCollection": {
           "__rl": true,
           "mode": "list",
           "value": "continuidad_estudios"
         },
+        "topK": 10,
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
       "typeVersion": 1.3,
       "position": [
-        272,
-        176
+        336,
+        320
       ],
-      "id": "489d36de-6f6e-4428-91de-c07400cd5a75",
+      "id": "dd82f21d-fa55-4b98-964b-eb6de7af327c",
       "name": "Qdrant  Buscar Estudios",
       "credentials": {
         "qdrantApi": {
@@ -120,21 +121,22 @@
     {
       "parameters": {
         "mode": "retrieve-as-tool",
-        "toolDescription": "Utiliza esta herramienta para consultas generales, reglamentos internos estándar e información institucional común que no clasifique en estudios o laboral.",
+        "toolDescription": "Utiliza esta herramienta SOLO para consultas administrativas o generales: fechas de inscripción, requisitos, reglamentos, información institucional. Es una herramienta SECUNDARIA y de respaldo. No la uses para generar preguntas de práctica de examen — para eso siempre usa 'Qdrant Buscar Laborales' o 'Qdrant Buscar Estudios' según corresponda. Solo recurre a esta herramienta después de haber descartado que la consulta del usuario es sobre preguntas de práctica.",
         "qdrantCollection": {
           "__rl": true,
           "mode": "list",
           "value": "general"
         },
+        "topK": 5,
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
       "typeVersion": 1.3,
       "position": [
-        576,
-        176
+        640,
+        320
       ],
-      "id": "5c9a3f82-ed70-4ea5-b3e9-3a9dc8fd699a",
+      "id": "6b00bff9-8f77-4a19-b22a-d6b7c0ed05c8",
       "name": "Qdrant  Buscar General",
       "credentials": {
         "qdrantApi": {
@@ -145,15 +147,17 @@
     },
     {
       "parameters": {
-        "options": {}
+        "options": {
+          "systemMessage": "Eres un tutor de IA que ayuda a personas a prepararse para exámenes libres EPJA en Chile, en dos modalidades excluyentes: (1) fines laborales y (2) continuidad de estudios (Matemáticas, Lenguaje, Inglés, Ciencias Sociales, Ciencias Naturales).\n\nEl 90% de tu objetivo es esta mecánica, siempre en este orden:\n1. Si aún no sabes en qué modalidad está trabajando el usuario (o, si es continuidad de estudios, en qué materia), pregúntaselo primero.\n2. Si es la primera vez que el usuario pide una pregunta de práctica en esta conversación, pregúntale por sus pasatiempos, su trabajo o alguna situación cotidiana suya (algo breve y no invasivo). Guarda ese contexto y reutilízalo para personalizar las preguntas siguientes sin volver a preguntarlo, salvo que el usuario lo mencione de nuevo o cambie de tema.\n3. SIEMPRE llama a la herramienta correspondiente ('Qdrant Buscar Laborales' o 'Qdrant Buscar Estudios') ANTES de generar o responder una pregunta de práctica. Nunca inventes preguntas de memoria ni respondas 'no tengo esa información' sin haber llamado a la herramienta al menos dos veces con frases de búsqueda distintas (incluyendo el nombre exacto de la materia o el tema si el usuario lo mencionó). Estas dos herramientas son las PRIORITARIAS del proyecto.\n4. Toma UNA pregunta real recuperada del documento y reescríbela ambientada en el contexto personal del usuario (sus hobbies, trabajo o vida cotidiana), manteniendo exactamente la misma dificultad, el mismo concepto y el mismo tipo de razonamiento que la pregunta original — no la simplifiques ni la compliques.\n5. Presenta la pregunta y espera la respuesta del usuario. No reveles la respuesta correcta todavía.\n6. Cuando el usuario responda, usa la 'Clave Correcta' y la 'Explicación para la IA' que vengan en el documento recuperado para calificar su respuesta: dile si acertó o no, explica el porqué de forma clara y breve, y ofrece otra pregunta de práctica.\n7. Usa 'Qdrant Buscar General' SOLO para preguntas administrativas (fechas, inscripción, requisitos, reglamentos) — nunca para generar preguntas de práctica. Antes de usarla, confirma que la consulta del usuario claramente no es sobre contenido de práctica de examen.\n8. Nunca mezcles contenido de fines laborales con el de continuidad de estudios, ni el de una materia con otra.\n9. Basa siempre tus preguntas y calificaciones únicamente en la información recuperada de las herramientas. Si tras varios intentos de búsqueda no encuentras contenido de la materia pedida, dilo con honestidad en vez de inventar."
+        }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        -64,
-        -144
+        0,
+        0
       ],
-      "id": "ec33c865-1d0f-46c7-bb3b-e201bb82ea54",
+      "id": "cb2207f3-cf78-49bd-a98c-34239ae01fc8",
       "name": "El Señor IA",
       "retryOnFail": true,
       "maxTries": 4,
@@ -255,11 +259,10 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "300f5aa3-ac2a-449d-aad0-9631992c02e8",
+  "versionId": "c21cde74-bffb-415a-85eb-49534122ae8c",
   "meta": {
-    "templateCredsSetupCompleted": true,
     "instanceId": "30722f337168db714d2bcb5e70369b51ca932b7b864906159f4c0fc1b2f9639a"
   },
-  "id": "6gVtFt5N0H5ILRzp",
+  "id": "fr6jzkc1j9KZGyQc",
   "tags": []
 }
