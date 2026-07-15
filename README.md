@@ -213,4 +213,4 @@ Si tienes ideas para mejorar la nivelación escolar de más personas adultas, tu
 
 ## 👤 Autor
 
-Proyecto desarrollado por **Andrés** para el Challenge de **Alura y Oracle**.
+Proyecto desarrollado por **Andrés Palma** para el Challenge de **Alura y Oracle**.
