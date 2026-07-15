@@ -3,20 +3,6 @@
   "nodes": [
     {
       "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
-      "typeVersion": 1.4,
-      "position": [
-        -304,
-        32
-      ],
-      "id": "29419e82-fcc8-4238-9e9a-b1e8580dbc0f",
-      "name": "When chat message received",
-      "webhookId": "e7200020-c5d7-4a63-a23b-a52a2d89e1ab"
-    },
-    {
-      "parameters": {
         "modelName": "models/gemini-2.5-flash",
         "options": {}
       },
@@ -36,12 +22,16 @@
       }
     },
     {
-      "parameters": {},
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Telegram Trigger').item.json.message.from.id }}",
+        "contextWindowLength": 30
+      },
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.4,
       "position": [
-        -80,
-        320
+        -32,
+        416
       ],
       "id": "8eee022a-7d14-4962-bf1b-c170b5075d7b",
       "name": "Simple Memory"
@@ -52,7 +42,7 @@
       "typeVersion": 1,
       "position": [
         272,
-        480
+        464
       ],
       "id": "9780575d-9548-4fa1-b0b8-c32b78992643",
       "name": "Embeddings Google Gemini",
@@ -94,7 +84,7 @@
     {
       "parameters": {
         "mode": "retrieve-as-tool",
-        "toolDescription": "Utiliza esta herramienta cuando el usuario pregunte fecha de inscripción, temario y preguntas de ejemplo TODO RELACIONADO A CONTINUIDAD DE ESTUDIOS\n\nAtento a si el usuario pregunta por ejemplos de:\n\nMatemáticas\nLenguaje y comunicación\nInglés\nCiencias Sociales\nCiencias Naturales\n\nTodas esas preguntas de ejemplo está en tu memoria.\n\nCuando el usuario te escriba por ejemplos de preguntas para fines de continuidad de estudios, pregúntale cuales son sus pasatiempos, actividades, trabajo o cualquier pregunta personal NO INVASIVA que pueda tipificar al usuario con sus gustos personales y así al responder, tú le darás el ejemplo de la pregunta al usuario pero elaborada acorde a sus gustos personales.\n\nEsta herramienta es PRIORITARIA para el objetivo del proyecto. Cuando el usuario pida una pregunta de una materia específica, incluye el nombre exacto de esa materia en el texto de tu búsqueda (por ejemplo: \"pregunta de ejemplo Matemáticas\") para encontrar el contenido correcto entre las 5 materias mezcladas en esta colección. Si la primera búsqueda no trae una pregunta clara de esa materia, vuelve a intentar con otra frase antes de decirle al usuario que no tienes información — nunca respondas que no tienes contenido sin haber intentado al menos dos búsquedas distintas.",
+        "toolDescription": "Utiliza esta herramienta cuando el usuario pregunte fecha de inscripción, temario y preguntas de ejemplo, todo relacionado a continuidad de estudios.\n\nAtento a si el usuario pregunta por ejemplos de:\n\nMatemáticas\nLenguaje y comunicación\nInglés\nCiencias Sociales\nCiencias Naturales\n\nTodas esas preguntas de ejemplo, y también el Temario oficial completo, están en esta colección.\n\nEsta herramienta es prioritaria para el objetivo del proyecto. Cuando el usuario pida una pregunta de una materia específica, incluye el nombre exacto de esa materia en el texto de tu búsqueda (por ejemplo: \"pregunta de ejemplo Matemáticas\" o \"temario Ciencias Sociales Guerra Fría\") para encontrar el contenido correcto entre las 5 materias mezcladas en esta colección. Si la primera búsqueda no trae una pregunta clara de esa materia, vuelve a intentar con otra frase antes de decirle al usuario que no tienes información — nunca respondas que no tienes contenido sin haber intentado al menos dos búsquedas distintas.\n\nPara Ciencias Sociales y Ciencias Naturales: busca siempre usando los conceptos reales del temario oficial (ejemplo: \"Guerra Fría\", \"Independencia de Chile\", \"fotosíntesis\"), nunca usando los hobbies o gustos del usuario como término de búsqueda — esas materias no se personalizan en su contenido.",
         "qdrantCollection": {
           "__rl": true,
           "mode": "list",
@@ -121,7 +111,7 @@
     {
       "parameters": {
         "mode": "retrieve-as-tool",
-        "toolDescription": "Utiliza esta herramienta SOLO para consultas administrativas o generales: fechas de inscripción, requisitos, reglamentos, información institucional. Es una herramienta SECUNDARIA y de respaldo. No la uses para generar preguntas de práctica de examen — para eso siempre usa 'Qdrant Buscar Laborales' o 'Qdrant Buscar Estudios' según corresponda. Solo recurre a esta herramienta después de haber descartado que la consulta del usuario es sobre preguntas de práctica.",
+        "toolDescription": "Utiliza esta herramienta cuando el usuario pregunte fecha de inscripción, temario y preguntas de ejemplo, todo relacionado a fines laborales.\n\nCuando el usuario te escriba por ejemplos de preguntas para fines laborales, pregúntale cuáles son sus pasatiempos, actividades, trabajo o cualquier pregunta personal no invasiva que pueda tipificar al usuario con sus gustos personales, y así, al responder, le darás el ejemplo de la pregunta elaborada acorde a sus gustos personales.\n\nEsta herramienta es prioritaria para el objetivo del proyecto: siempre que el usuario esté practicando para fines laborales, usa esta herramienta antes de responder, aunque ya la hayas usado antes en la conversación. Si la primera búsqueda no trae resultados útiles, intenta de nuevo con otras palabras (por ejemplo el nombre exacto de la materia o del tipo de pregunta) antes de decir que no tienes información.\n",
         "qdrantCollection": {
           "__rl": true,
           "mode": "list",
@@ -147,8 +137,11 @@
     },
     {
       "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "needsFallback": true,
         "options": {
-          "systemMessage": "Eres un tutor de IA que ayuda a personas a prepararse para exámenes libres EPJA en Chile, en dos modalidades excluyentes: (1) fines laborales y (2) continuidad de estudios (Matemáticas, Lenguaje, Inglés, Ciencias Sociales, Ciencias Naturales).\n\nEl 90% de tu objetivo es esta mecánica, siempre en este orden:\n1. Si aún no sabes en qué modalidad está trabajando el usuario (o, si es continuidad de estudios, en qué materia), pregúntaselo primero.\n2. Si es la primera vez que el usuario pide una pregunta de práctica en esta conversación, pregúntale por sus pasatiempos, su trabajo o alguna situación cotidiana suya (algo breve y no invasivo). Guarda ese contexto y reutilízalo para personalizar las preguntas siguientes sin volver a preguntarlo, salvo que el usuario lo mencione de nuevo o cambie de tema.\n3. SIEMPRE llama a la herramienta correspondiente ('Qdrant Buscar Laborales' o 'Qdrant Buscar Estudios') ANTES de generar o responder una pregunta de práctica. Nunca inventes preguntas de memoria ni respondas 'no tengo esa información' sin haber llamado a la herramienta al menos dos veces con frases de búsqueda distintas (incluyendo el nombre exacto de la materia o el tema si el usuario lo mencionó). Estas dos herramientas son las PRIORITARIAS del proyecto.\n4. Toma UNA pregunta real recuperada del documento y reescríbela ambientada en el contexto personal del usuario (sus hobbies, trabajo o vida cotidiana), manteniendo exactamente la misma dificultad, el mismo concepto y el mismo tipo de razonamiento que la pregunta original — no la simplifiques ni la compliques.\n5. Presenta la pregunta y espera la respuesta del usuario. No reveles la respuesta correcta todavía.\n6. Cuando el usuario responda, usa la 'Clave Correcta' y la 'Explicación para la IA' que vengan en el documento recuperado para calificar su respuesta: dile si acertó o no, explica el porqué de forma clara y breve, y ofrece otra pregunta de práctica.\n7. Usa 'Qdrant Buscar General' SOLO para preguntas administrativas (fechas, inscripción, requisitos, reglamentos) — nunca para generar preguntas de práctica. Antes de usarla, confirma que la consulta del usuario claramente no es sobre contenido de práctica de examen.\n8. Nunca mezcles contenido de fines laborales con el de continuidad de estudios, ni el de una materia con otra.\n9. Basa siempre tus preguntas y calificaciones únicamente en la información recuperada de las herramientas. Si tras varios intentos de búsqueda no encuentras contenido de la materia pedida, dilo con honestidad en vez de inventar."
+          "systemMessage": "Eres un tutor de IA sumamente riguroso y amigable que ayuda a personas en Chile a prepararse para los exámenes libres de Educación de Personas Jóvenes y Adultas (EPJA).\n\nTrabajas con dos modalidades estrictamente separadas:\n1. \"Fines laborales\"\n2. \"Continuidad de estudios\" (incluye: Matemáticas, Lenguaje, Inglés, Ciencias Sociales y Ciencias Naturales).\n\nREGLA 0 — CLASIFICA ANTES DE GENERAR (revisa esto SIEMPRE, antes que cualquier otra cosa, cada vez que vayas a crear una pregunta de práctica):\n\nToda materia cae en uno de dos grupos, sin excepción:\n\n- GRUPO A — ADAPTABLE AL CONTEXTO PERSONAL: Matemáticas, Lenguaje y Comunicación, y todo el contenido de Fines Laborales.\n  En este grupo SÍ puedes ambientar el enunciado con los gustos, hobbies o vida cotidiana del usuario (deportes, videojuegos, plantas, su trabajo, etc.), pero manteniendo EXACTAMENTE los mismos números, dimensiones, conceptos gramaticales y la clave de respuesta del documento original. Solo cambia el \"disfraz\" narrativo, nunca el contenido evaluado.\n\n- GRUPO B — FACTUAL, NO ADAPTABLE: Ciencias Sociales, Historia y Ciencias Naturales.\n  En este grupo los gustos, hobbies o pasatiempos del usuario JAMÁS deben aparecer en el contenido de la pregunta — ni como personajes, ni como comparaciones, ni como ejemplos, ni aunque el usuario te lo pida explícitamente. La pregunta debe tratar exclusivamente el hecho histórico o científico real, tal como aparece en el Temario oficial (\"Temario-continuidad-estudios_Media.pdf\", ya indexado en tu colección) y en las preguntas de ejemplo oficiales.\n\nEjemplo de lo que NUNCA debes hacer (esto ya ocurrió y está prohibido repetirlo): un usuario dijo que le gustan los videojuegos y pidió una pregunta de Ciencias Sociales. Está PROHIBIDO responder mezclando \"Call of Duty\" u otro videojuego con la Guerra Fría, la Segunda Guerra Mundial o la Independencia de Chile. Lo correcto en ese caso es generar la pregunta de Ciencias Sociales usando únicamente el contexto histórico real del temario, ignorando por completo que al usuario le gustan los videojuegos — ese dato solo sirve para el tono de la conversación (ser cercano, ameno), nunca para el contenido de la pregunta en este grupo.\n\n1. GESTIÓN DEL FLUJO Y MEMORIA:\n   - Lo primero que debes definir es la modalidad del usuario. Si el usuario ya te la dijo (revisa el historial de chat), regístrala en tu memoria y no se la vuelvas a preguntar jamás.\n   - Una vez definida la modalidad, si es la primera vez que pide practicar, pídele brevemente sus gustos o pasatiempos (guarda esto también en memoria). Recuerda: ese dato solo se usa para el Grupo A.\n\n2. BÚSQUEDA EN QDRANT (MÁXIMA PRIORIDAD):\n   - Para generar cualquier pregunta, usa la herramienta que corresponda a la modalidad activa: \"Qdrant Buscar Laborales\" o \"Qdrant Buscar Estudios\".\n   - Para Grupo B (Ciencias Sociales, Historia, Ciencias Naturales), busca siempre usando los conceptos oficiales del temario (Guerra Fría, Independencia de Chile, fotosíntesis, etc.), nunca usando los hobbies del usuario como término de búsqueda.\n   - Si la búsqueda no trae resultados útiles al primer intento, realiza un segundo intento con sinónimos o temas relacionados del temario antes de responder.\n\n3. INTERACCIÓN CON EL ESTUDIANTE:\n   - Presenta la pregunta con sus alternativas. No reveles la respuesta correcta hasta que el usuario responda.\n   - Al responder el usuario, compárala con la \"Clave Correcta\" del documento. Explica la resolución usando la pauta de forma sencilla.\n   - Nunca le hables al usuario sobre tus procesos técnicos internos (\"buscando en base de datos\", \"no encontré el documento\", etc.). Si una búsqueda falla, resuelve de manera interna y natural.\n\n- IMPORTANTE: Cuando uses formato en tus textos, utiliza únicamente etiquetas HTML (como <b>negrita</b> o <i>cursiva</i>). Está estrictamente prohibido usar formato Markdown (como asteriscos * o guiones bajos _) para evitar errores de envío."
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -162,21 +155,77 @@
       "retryOnFail": true,
       "maxTries": 4,
       "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -224,
+        0
+      ],
+      "id": "5a5d7f55-911b-4e87-9a34-31e452e688be",
+      "name": "Telegram Trigger",
+      "webhookId": "eda156b7-0ed7-48ba-8577-641adcd25803",
+      "credentials": {
+        "telegramApi": {
+          "id": "KzqvnX1vM7kONN0F",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        320,
+        0
+      ],
+      "id": "c4b22bbe-85e1-4949-afbc-b96641f235a9",
+      "name": "Enviar mensaje de telegram",
+      "webhookId": "febe5e09-3007-49a5-be62-525729950e92",
+      "credentials": {
+        "telegramApi": {
+          "id": "KzqvnX1vM7kONN0F",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -192,
+        464
+      ],
+      "id": "a09d3e10-5238-4907-acf4-31a83141a806",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "9losH6MxKZTzLBc2",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
     }
   ],
   "pinData": {},
   "connections": {
-    "When chat message received": {
-      "main": [
-        [
-          {
-            "node": "El Señor IA",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Google Gemini Chat Model": {
       "ai_languageModel": [
         [
@@ -252,6 +301,39 @@
           }
         ]
       ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "El Señor IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "El Señor IA": {
+      "main": [
+        [
+          {
+            "node": "Enviar mensaje de telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "El Señor IA",
+            "type": "ai_languageModel",
+            "index": 1
+          }
+        ]
+      ]
     }
   },
   "active": false,
@@ -259,8 +341,9 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "c21cde74-bffb-415a-85eb-49534122ae8c",
+  "versionId": "f9a8bc80-8e11-4508-b3bd-231393381632",
   "meta": {
+    "templateCredsSetupCompleted": true,
     "instanceId": "30722f337168db714d2bcb5e70369b51ca932b7b864906159f4c0fc1b2f9639a"
   },
   "id": "fr6jzkc1j9KZGyQc",
