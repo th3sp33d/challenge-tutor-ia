@@ -111,7 +111,7 @@
     {
       "parameters": {
         "mode": "retrieve-as-tool",
-        "toolDescription": "Utiliza esta herramienta cuando el usuario pregunte fecha de inscripción, temario y preguntas de ejemplo, todo relacionado a fines laborales.\n\nCuando el usuario te escriba por ejemplos de preguntas para fines laborales, pregúntale cuáles son sus pasatiempos, actividades, trabajo o cualquier pregunta personal no invasiva que pueda tipificar al usuario con sus gustos personales, y así, al responder, le darás el ejemplo de la pregunta elaborada acorde a sus gustos personales.\n\nEsta herramienta es prioritaria para el objetivo del proyecto: siempre que el usuario esté practicando para fines laborales, usa esta herramienta antes de responder, aunque ya la hayas usado antes en la conversación. Si la primera búsqueda no trae resultados útiles, intenta de nuevo con otras palabras (por ejemplo el nombre exacto de la materia o del tipo de pregunta) antes de decir que no tienes información.\n",
+        "toolDescription": "Utiliza esta herramienta SOLO para consultas administrativas o generales: fechas de inscripción, requisitos, reglamentos, información institucional. Es una herramienta SECUNDARIA y de respaldo. No la uses para generar preguntas de práctica de examen — para eso siempre usa \"Qdrant Buscar Laborales\" o \"Qdrant Buscar Estudios\" según corresponda. Solo recurre a esta herramienta después de haber descartado que la consulta del usuario es sobre preguntas de práctica.",
         "qdrantCollection": {
           "__rl": true,
           "mode": "list",
@@ -343,7 +343,7 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "ac2fb9dc-02e0-43f6-a576-e3fea9cd6738",
+  "versionId": "6221939b-67da-4b53-bc8a-555144097fa0",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "a6c139af1c1b6971929502a0004d0a393eebd8d7e1dbe0a62b6fdc6da503a907"
