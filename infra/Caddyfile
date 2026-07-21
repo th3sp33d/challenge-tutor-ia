@@ -1,0 +1,3 @@
+n8n.devfull.cl {
+    reverse_proxy challenge_n8n:5678
+}
