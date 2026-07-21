@@ -149,17 +149,17 @@ El sistema utiliza una arquitectura **RAG (Retrieval-Augmented Generation)** con
 
 La arquitectura fue pensada bajo principios de robustez y rentabilidad, sosteniendo el servicio de forma gratuita y lista para producción:
 
-| Tecnología | Rol |
-| --- | --- |
-| ⚙️ **n8n** | Orquestador visual de los flujos de trabajo y la lógica del agente |
-| 🤖 **Telegram Bot API** | Canal de interacción con el estudiante (mensajes entrantes y salientes en formato HTML) |
-| 🧠 **Google Gemini 3.1 Flash Lite** | Modelo de lenguaje (LLM) principal, de alta velocidad y bajo costo |
-| 🔁 **Google Gemini 2.0 Flash Lite** | Modelo de respaldo (*fallback*): si el modelo principal falla, el agente reintenta automáticamente con este modelo, sin interrumpir la conversación del estudiante |
-| 🏷️ **Gemini Embeddings** | Modelo que codifica consultas y fragmentos de texto en vectores |
-| 🗄️ **Qdrant** | Base de datos vectorial persistente para el almacenamiento y la segmentación semántica |
-| 🐳 **Docker / Docker Compose** | Orquestación de los contenedores de n8n, Qdrant y Caddy |
-| 🔒 **Caddy Server** | Reverse proxy con emisión y renovación automática de certificados SSL/TLS |
-| ☁️ **Google Cloud Platform (Compute Engine)** | Máquina virtual con IP pública donde corre toda la infraestructura, 24/7 |
+| Tecnología                                    | Rol                                                                                                                                                                |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| ⚙️ **n8n**                                    | Orquestador visual de los flujos de trabajo y la lógica del agente                                                                                                 |
+| 🤖 **Telegram Bot API**                       | Canal de interacción con el estudiante (mensajes entrantes y salientes en formato HTML)                                                                            |
+| 🧠 **Google Gemini 3.1 Flash Lite**           | Modelo de lenguaje (LLM) principal, de alta velocidad y bajo costo                                                                                                 |
+| 🔁 **Google Gemini 2.0 Flash Lite**           | Modelo de respaldo (_fallback_): si el modelo principal falla, el agente reintenta automáticamente con este modelo, sin interrumpir la conversación del estudiante |
+| 🏷️ **Gemini Embeddings**                      | Modelo que codifica consultas y fragmentos de texto en vectores                                                                                                    |
+| 🗄️ **Qdrant**                                 | Base de datos vectorial persistente para el almacenamiento y la segmentación semántica                                                                             |
+| 🐳 **Docker / Docker Compose**                | Orquestación de los contenedores de n8n, Qdrant y Caddy                                                                                                            |
+| 🔒 **Caddy Server**                           | Reverse proxy con emisión y renovación automática de certificados SSL/TLS                                                                                          |
+| ☁️ **Google Cloud Platform (Compute Engine)** | Máquina virtual con IP pública donde corre toda la infraestructura, 24/7                                                                                           |
 
 ---
 
@@ -220,14 +220,14 @@ En producción, esta infraestructura corre de forma persistente en una instancia
 
 ## 📸 Demo y capturas
 
-| Captura | Descripción |
-| --- | --- |
-| `docs/telegram-saludo.png` | Saludo inicial del bot y selección de modalidad (Fines Laborales / Continuidad de Estudios). |
-| `docs/telegram-pregunta.png` | El bot presentando una pregunta de práctica personalizada con formato HTML. |
-| `docs/telegram-respuesta.png` | El alumno respondiendo y el bot calificando con la pauta oficial. |
-| `docs/n8n-workflow-agent.png` | Flujo completo en n8n: el agente "El Señor IA", el memory buffer, el modelo Gemini y las 3 herramientas de Qdrant conectadas. |
-| `docs/qdrant-collections.png` | Panel de Qdrant mostrando las colecciones `fines_laborales`, `continuidad_estudios` y `general`. |
-| `docs/gcp-caddy-deploy.png` | Consola de Google Cloud / terminal SSH ejecutando `docker ps`, con los contenedores de Caddy, n8n y Qdrant activos bajo HTTPS. |
+| Captura                                                  | Descripción                                                                                                                    |
+| :------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------- |
+| ![Saludo e inicio del Bot](docs/telegram-saludo.png)     | Saludo inicial del bot y selección de modalidad (Fines Laborales / Continuidad de Estudios).                                   |
+| ![Pregunta personalizada](docs/telegram-pregunta.png)    | El bot presentando una pregunta de práctica personalizada con formato HTML.                                                    |
+| ![Respuesta y evaluación](docs/telegram-respuesta.png)   | El alumno respondiendo y el bot calificando con la pauta oficial.                                                              |
+| ![Canvas en n8n](docs/n8n-workflow-agent.png)            | Flujo completo en n8n: el agente "El Señor IA", el memory buffer, el modelo Gemini y las 3 herramientas de Qdrant conectadas.  |
+| ![Colecciones en Qdrant](docs/qdrant-collections.png)    | Panel de Qdrant mostrando las colecciones `fines_laborales`, `continuidad_estudios` y `general`.                               |
+| ![Despliegue en Google Cloud](docs/gcp-caddy-deploy.png) | Consola de Google Cloud / terminal SSH ejecutando `docker ps`, con los contenedores de Caddy, n8n y Qdrant activos bajo HTTPS. |
 
 ---
 
