@@ -1,14 +1,17 @@
 # 🎓 Tutor Académico Inteligente (RAG) — Nivelación de Estudios
 
 > **Proyecto desarrollado para el Challenge de Alura y Oracle.**
-> Un asistente de Inteligencia Artificial móvil, flexible y disponible 24/7, diseñado con el objetivo que el estudiante pueda culminar con éxito la Enseñanza Media (Secundaria / Bachillerato) en Chile y Latinoamérica (proximamente).
+> Un asistente de Inteligencia Artificial móvil, flexible y disponible 24/7, diseñado con el objetivo que el estudiante pueda culminar con éxito la Enseñanza Media (Secundaria / Bachillerato) en Chile y Latinoamérica (próximamente).
+
+### 🤖 [Prueba el bot aquí: @TutorConIAbot](https://t.me/TutorConIAbot)
 
 ---
 
 ## 📑 Tabla de contenidos
 
 - [El impacto social y la problemática](#-el-impacto-social-y-la-problemática)
-- [Nuestra solución](#-nuestra-solución)
+- [Mi solución](#-mi-solución)
+- [Canal de interacción: Telegram](#-canal-de-interacción-telegram)
 - [El corazón del proyecto: personalización y contexto real](#-el-corazón-del-proyecto-personalización-y-contexto-real)
 - [Arquitectura técnica (RAG)](#️-arquitectura-técnica-rag)
 - [Stack tecnológico](#️-stack-tecnológico)
@@ -39,6 +42,17 @@ Transformar cualquier dispositivo móvil en un espacio de estudio dinámico, int
 
 ---
 
+## 🤖 Canal de interacción: Telegram
+
+El tutor está desplegado y disponible directamente en **Telegram**, para que el estudiante lo use desde su celular sin instalar ninguna aplicación nueva.
+
+- **Recepción de mensajes:** nodo `Telegram Trigger` de n8n, que escucha cada mensaje que el alumno envía al bot.
+- **Envío de respuestas:** nodo `Telegram Send Message`, configurado con `parse_mode: HTML`.
+- **Formato de las respuestas:** la primera instrucción del `systemMessage` del agente — antes incluso de explicar las modalidades — es la prohibición absoluta de usar sintaxis Markdown (`**negrita**`, `*cursiva*`, `_cursiva_`, `#` para títulos), porque Telegram no la interpreta de forma nativa y el texto llegaría roto al estudiante. En su lugar, todas las respuestas usan únicamente etiquetas HTML (`<b>`, `<i>`) para negritas y cursivas, garantizando que el formato se vea correctamente tanto en la app móvil como en la de escritorio.
+- **Memoria por usuario:** cada conversación se identifica con el `id` de Telegram del alumno (`sessionKey` personalizado en el nodo de memoria), así el bot recuerda su modalidad y sus gustos entre sesiones distintas sin mezclarlos con los de otro estudiante.
+
+---
+
 ## ⚡ El corazón del proyecto: personalización y contexto real
 
 Para que la enseñanza sea efectiva y no frustrante, el tutor se rige bajo una regla fundamental:
@@ -49,15 +63,23 @@ El agente identifica y separa estas dos realidades evaluativas con precisión:
 
 ### 💼 1. Modalidad: Fines Laborales
 
-- **Enfoque:** preparación concentrada y práctica.
+- **Qué es:** certificación de competencias orientada a obtener la licencia de escolaridad obligatoria completa exclusivamente para efectos de trabajo.
 - **Contenido:** basado directamente en las normativas y exámenes oficiales en PDF del Ministerio de Educación (MINEDUC).
 - **Dinámica:** la IA realiza un perfilamiento empático, preguntándole al alumno por sus pasatiempos, su trabajo o sus actividades diarias. Cada ejercicio se redacta de forma personalizada usando esos intereses — por ejemplo, si le gusta el fútbol, los problemas de matemáticas se plantean con estadísticas de su equipo favorito.
 
 ### 🎓 2. Modalidad: Continuidad de Estudios
 
-- **Enfoque:** dominio académico profundo.
-- **Contenido:** basado en mallas curriculares extensas para la preparación de exámenes de validación de estudios y educación superior.
+- **Qué es:** obtener la licencia de Enseñanza Media con el objetivo de continuar estudios en Educación Superior (CFT, Institutos Profesionales, Universidades) o acceder a capacitaciones y cursos como SENSE.
+- **Contenido:** basado en mallas curriculares extensas para la preparación de exámenes de validación de estudios.
 - **Asignaturas:** Matemáticas, Lenguaje y Comunicación, Inglés, Ciencias Sociales y Ciencias Naturales.
+
+### 🧠 Cómo funciona el flujo de conversación
+
+1. **Selección de modalidad:** al iniciar, el bot pregunta si el usuario viene por Fines Laborales o por Continuidad de Estudios, y guarda esa elección en memoria para no volver a preguntarla.
+2. **Perfilamiento de hobbies:** si es la primera vez que el usuario pide practicar, el bot le pregunta brevemente por sus intereses (deportes, videojuegos, trabajo, vida cotidiana) y también los guarda en memoria.
+3. **Clasificación de la materia (Regla 0):** antes de generar cualquier pregunta, el agente clasifica la materia solicitada en uno de dos grupos:
+   - **Grupo A — Adaptable:** Matemáticas y Lenguaje y Comunicación (en ambas modalidades) e Inglés (en Continuidad de Estudios). Aquí el enunciado sí se puede ambientar con los gustos del alumno, manteniendo exactamente los mismos números, dimensiones y clave de respuesta del documento original.
+   - **Grupo B — No adaptable:** Ciencias Sociales, Historia y Ciencias Naturales. Aquí los hobbies del usuario nunca se mezclan con el contenido de la pregunta — se respeta el hecho histórico o científico real tal como aparece en el temario oficial indexado en Qdrant.
 
 ### 🏢 3. Consultas institucionales e información general
 
@@ -98,9 +120,12 @@ El sistema utiliza una arquitectura **RAG (Retrieval-Augmented Generation)** con
                │ (consulta semántica)
 ┌──────────────┴──────────────┐
 │  Agente de Consulta IA       │
-│  (Gemini 2.5 Flash,           │
-│   Tools Agent + memoria)     │
+│  (Gemini 3.1 Flash Lite       │
+│   + fallback 2.0, Tools Agent│
+│   + memoria)                 │
 └──────────────▲──────────────┘
+               │
+        [ Telegram Bot ]
                │
           [ Estudiante ]
 ```
@@ -113,25 +138,28 @@ El sistema utiliza una arquitectura **RAG (Retrieval-Augmented Generation)** con
 
 ### 2. Flujo del Agente de Consulta (experiencia de usuario)
 
-- **Procesamiento:** utiliza el modelo **Gemini 2.5 Flash** en modo _Tools Agent_, con memoria de conversación (`Simple Memory`) para mantener el contexto e hilo de la conversación con el alumno.
+- **Procesamiento:** utiliza el modelo **Gemini 3.1 Flash Lite** en modo _Tools Agent_, con un segundo modelo (**Gemini 2.0 Flash Lite**) configurado como respaldo automático ante fallos del modelo principal.
+- **Memoria:** conserva los últimos 30 mensajes de la conversación (`Simple Memory`, ventana de contexto de 30), identificada por el `id` de Telegram del alumno.
 - **Ruteo semántico de colecciones:** en lugar de buscar en un único bloque masivo de datos, el agente evalúa la intención de la consulta y activa específicamente la herramienta de Qdrant asociada a la colección correcta (`fines_laborales`, `continuidad_estudios` o `general`), maximizando la precisión de la respuesta y evitando mezclar temarios.
-- **Personalización dirigida por prompt:** el agente tiene instrucciones explícitas para preguntar por el contexto personal del alumno antes de generar un ejercicio, y para calificar sus respuestas usando la pauta de corrección incluida en el propio documento recuperado.
+- **Personalización dirigida por prompt:** el agente sigue la Regla 0 descrita más arriba para decidir cuándo puede y cuándo no puede mezclar los gustos del alumno con el contenido de la pregunta, y luego califica sus respuestas usando la pauta de corrección incluida en el propio documento recuperado.
 
 ---
 
 ## 🛠️ Stack tecnológico
 
-La arquitectura fue pensada bajo principios de robustez y rentabilidad, sosteniendo el servicio de forma completamente gratuita y lista para producción:
+La arquitectura fue pensada bajo principios de robustez y rentabilidad, sosteniendo el servicio de forma gratuita y lista para producción:
 
-| Tecnología                                                  | Rol                                                                                               |
-| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| ⚙️ **n8n**                                                  | Orquestador visual de los flujos de trabajo y la lógica del agente                                |
-| 🧠 **Google Gemini 2.5 Flash**                              | Modelo de lenguaje (LLM) principal, de alta velocidad y amplia ventana de contexto                |
-| 🏷️ **Gemini Embeddings**                                    | Modelo que codifica consultas y fragmentos de texto en vectores                                   |
-| 🗄️ **Qdrant**                                               | Base de datos vectorial persistente para el almacenamiento y la segmentación semántica            |
-| 🐳 **Docker / Docker Compose**                              | Contenerización de n8n y Qdrant para un despliegue reproducible                                   |
-| 🌐 **ngrok**                                                | Túnel público para pruebas locales antes del despliegue en la nube                                |
-| ☁️ **Oracle Cloud Infrastructure (OCI) — Always Free Tier** | Máquina virtual ARM (Ampere) donde n8n y Qdrant corren de forma persistente y 100% gratuita, 24/7 |
+| Tecnología | Rol |
+| --- | --- |
+| ⚙️ **n8n** | Orquestador visual de los flujos de trabajo y la lógica del agente |
+| 🤖 **Telegram Bot API** | Canal de interacción con el estudiante (mensajes entrantes y salientes en formato HTML) |
+| 🧠 **Google Gemini 3.1 Flash Lite** | Modelo de lenguaje (LLM) principal, de alta velocidad y bajo costo |
+| 🔁 **Google Gemini 2.0 Flash Lite** | Modelo de respaldo (*fallback*): si el modelo principal falla, el agente reintenta automáticamente con este modelo, sin interrumpir la conversación del estudiante |
+| 🏷️ **Gemini Embeddings** | Modelo que codifica consultas y fragmentos de texto en vectores |
+| 🗄️ **Qdrant** | Base de datos vectorial persistente para el almacenamiento y la segmentación semántica |
+| 🐳 **Docker / Docker Compose** | Orquestación de los contenedores de n8n, Qdrant y Caddy |
+| 🔒 **Caddy Server** | Reverse proxy con emisión y renovación automática de certificados SSL/TLS |
+| ☁️ **Google Cloud Platform (Compute Engine)** | Máquina virtual con IP pública donde corre toda la infraestructura, 24/7 |
 
 ---
 
@@ -141,17 +169,18 @@ La arquitectura fue pensada bajo principios de robustez y rentabilidad, sostenie
 CHALLENGE/
 ├── backend-n8n/
 │   ├── documentos/
-│   │   ├── continuidad_de_estudios/   # PDFs de las 5 asignaturas
+│   │   ├── continuidad_de_estudios/   # PDFs de las 5 asignaturas + temario oficial
 │   │   ├── fines_laborales/           # PDFs y temario laboral
 │   │   └── general/                   # Información institucional
 │   └── workflows/
 │       ├── ingesta-qdrant.json        # Flujo 1: ingesta y dosificación
-│       └── challenge-tutor-con-ia.json # Flujo 2: agente conversacional
+│       └── challenge-tutor-con-ia.json # Flujo 2: agente conversacional (Telegram)
 ├── infra/
-│   ├── docker-compose.yml             # Servicios n8n + Qdrant
+│   ├── docker-compose.yml             # Servicios n8n + Qdrant + Caddy
+│   ├── Caddyfile                      # Configuración del reverse proxy y HTTPS
 │   └── .env
 ├── .gitignore
-├── arrancador.bat                     # Levanta Docker + n8n + túnel ngrok
+├── arrancador.bat                     # Levanta Docker + n8n localmente (entorno de desarrollo)
 └── README.md
 ```
 
@@ -161,13 +190,14 @@ CHALLENGE/
 
 ### Requisitos previos
 
-- Docker y Docker Compose instalados.
+- Docker y Docker Compose instalados (localmente o en tu VM de nube).
 - Una API Key de [Google AI Studio](https://aistudio.google.com/) para Gemini.
-- (Opcional, para pruebas locales) una cuenta de [ngrok](https://ngrok.com/) con un dominio estático.
+- Un bot de Telegram creado con [@BotFather](https://t.me/BotFather) y su token de API.
+- (Para producción) un dominio o subdominio propio apuntando a la IP de tu servidor, para que Caddy pueda emitir el certificado SSL automáticamente.
 
 ### Pasos
 
-1. **Levanta los contenedores de n8n y Qdrant:**
+1. **Levanta los contenedores de n8n, Qdrant y Caddy:**
    ```bash
    cd infra
    docker compose up -d
@@ -175,27 +205,29 @@ CHALLENGE/
 2. **Crea las tres colecciones en Qdrant** (`fines_laborales`, `continuidad_estudios`, `general`) — se crean automáticamente la primera vez que corres el flujo de ingesta en modo _insert_.
 3. **Importa los flujos JSON** en n8n desde `backend-n8n/workflows/`:
    - `ingesta-qdrant.json` → flujo de carga de documentos.
-   - `challenge-tutor-con-ia.json` → flujo del agente conversacional.
+   - `challenge-tutor-con-ia.json` → flujo del agente conversacional con Telegram.
 4. **Configura tus credenciales** en n8n:
    - Google Gemini (PaLM API) en los nodos de LLM y Embeddings.
    - Qdrant API, apuntando a `http://qdrant:6333` (nombre del servicio dentro de la red de Docker).
+   - Telegram API, con el token entregado por @BotFather.
 5. **Coloca tus PDFs oficiales** en `backend-n8n/documentos/`, respetando las tres carpetas por categoría.
 6. **Ejecuta el flujo de ingesta** manualmente para poblar las colecciones vectoriales.
-7. **Activa el flujo del agente** y pruébalo desde el panel de Chat de n8n, o expón el webhook con ngrok / OCI para acceso externo.
+7. **Activa el flujo del agente** — el webhook de Telegram queda expuesto automáticamente a través de Caddy sobre HTTPS, sin necesidad de túneles como ngrok.
 
-Para producción, el mismo `docker-compose.yml` puede desplegarse sin cambios en una instancia **OCI Always Free Tier (ARM Ampere)**, garantizando disponibilidad 24/7 sin costo.
+En producción, esta infraestructura corre de forma persistente en una instancia de **Google Cloud Platform (Compute Engine)**, con Caddy gestionando el certificado SSL y el subdominio público del servidor.
 
 ---
 
 ## 📸 Demo y capturas
 
-| Captura                    | Descripción                                                                                     |
-| -------------------------- | ----------------------------------------------------------------------------------------------- |
-| `docs/demo-chat.png`       | El agente realizando el perfilamiento empático antes de formular un ejercicio personalizado.    |
-| `docs/flujo-ingesta.png`   | Flujo 1: lectura de PDFs, extracción, loops de dosificación e indexación vectorial en Qdrant.   |
-| `docs/n8n-flow.png`        | Flujo 2: el canvas conversacional con memoria, modelo Gemini y las tres herramientas de Qdrant. |
-| `docs/oci-instance.png`    | Consola de Oracle Cloud mostrando la instancia en estado _Running_.                             |
-| `docs/services-status.png` | Terminal SSH ejecutando `docker ps`, confirmando que n8n y Qdrant operan de forma persistente.  |
+| Captura | Descripción |
+| --- | --- |
+| `docs/telegram-saludo.png` | Saludo inicial del bot y selección de modalidad (Fines Laborales / Continuidad de Estudios). |
+| `docs/telegram-pregunta.png` | El bot presentando una pregunta de práctica personalizada con formato HTML. |
+| `docs/telegram-respuesta.png` | El alumno respondiendo y el bot calificando con la pauta oficial. |
+| `docs/n8n-workflow-agent.png` | Flujo completo en n8n: el agente "El Señor IA", el memory buffer, el modelo Gemini y las 3 herramientas de Qdrant conectadas. |
+| `docs/qdrant-collections.png` | Panel de Qdrant mostrando las colecciones `fines_laborales`, `continuidad_estudios` y `general`. |
+| `docs/gcp-caddy-deploy.png` | Consola de Google Cloud / terminal SSH ejecutando `docker ps`, con los contenedores de Caddy, n8n y Qdrant activos bajo HTTPS. |
 
 ---
 
@@ -203,7 +235,7 @@ Para producción, el mismo `docker-compose.yml` puede desplegarse sin cambios en
 
 Este proyecto es una herramienta en constante evolución. Próximas actualizaciones incluyen:
 
-- Integración de nuevos canales (WhatsApp, Telegram) para facilitar el acceso móvil.
+- Integración de nuevos canales (WhatsApp, WebChat) para ampliar el acceso.
 - Módulos de analítica para docentes o tutores de acompañamiento.
 - Adaptación de temarios oficiales para otros países de Latinoamérica.
 
