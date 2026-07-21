@@ -220,16 +220,15 @@ En producción, esta infraestructura corre de forma persistente en una instancia
 
 ## 📸 Demo y capturas
 
-| Captura                                                  | Descripción                                                                                                                    |
-| :------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------- |
-| ![Saludo e inicio del Bot](docs/telegram-saludo.png)     | Saludo inicial del bot y selección de modalidad (Fines Laborales / Continuidad de Estudios).                                   |
-| ![Pregunta personalizada](docs/telegram-pregunta.png)    | El bot presentando una pregunta de práctica personalizada con formato HTML.                                                    |
-| ![Respuesta y evaluación](docs/telegram-respuesta.png)   | El alumno respondiendo y el bot calificando con la pauta oficial.                                                              |
-| ![Canvas en n8n](docs/n8n-workflow-agent.png)            | Flujo completo en n8n: el agente "El Señor IA", el memory buffer, el modelo Gemini y las 3 herramientas de Qdrant conectadas.  |
-| ![Colecciones en Qdrant](docs/qdrant-collections.png)    | Panel de Qdrant mostrando las colecciones `fines_laborales`, `continuidad_estudios` y `general`.                               |
-| ![Despliegue en Google Cloud](docs/gcp-caddy-deploy.png) | Consola de Google Cloud / terminal SSH ejecutando `docker ps`, con los contenedores de Caddy, n8n y Qdrant activos bajo HTTPS. |
-
----
+| Captura                                                  | Descripción                                                                                                                      |
+| :------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------- |
+| ![Inicio y Modalidad](docs/telegram-saludo.png)          | **Paso 1:** Saludo del usuario y pregunta del bot para seleccionar la modalidad (_Fines Laborales_ / _Continuidad de Estudios_). |
+| ![Perfilamiento de Hobbies](docs/telegram-hobbies.png)   | **Paso 2:** Selección del usuario y perfilamiento empático del bot consultando por sus hobbies y actividades diarias.            |
+| ![Pregunta Personalizada](docs/telegram-pregunta.png)    | **Paso 3:** Respuesta del usuario con sus gustos y generación de la pregunta de práctica adaptada a su contexto.                 |
+| ![Evaluación y Feedback](docs/telegram-evaluacion.png)   | **Paso 4:** Respuesta del alumno a la pregunta y retroalimentación pedagógica del bot usando la pauta oficial.                   |
+| ![Canvas en n8n](docs/n8n-workflow-agent.png)            | Flujo completo en n8n: agente "El Señor IA", memory buffer, modelo Gemini y las 3 herramientas de Qdrant.                        |
+| ![Colecciones en Qdrant](docs/qdrant-collections.png)    | Panel de Qdrant mostrando las colecciones `fines_laborales`, `continuidad_estudios` y `general`.                                 |
+| ![Despliegue en Google Cloud](docs/gcp-caddy-deploy.png) | Consola de Google Cloud / terminal SSH ejecutando `docker ps` con Caddy (HTTPS), n8n y Qdrant activos.                           |
 
 ## 📈 Futuras versiones y comunidad
 
