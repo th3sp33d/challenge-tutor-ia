@@ -1,3 +1,9 @@
+version: '3.8'
+
+networks:
+  challenge_net:
+    driver: bridge
+
 services:
   n8n:
     image: docker.n8n.io/n8nio/n8n:latest
@@ -7,16 +13,19 @@ services:
     ports:
       - "5678:5678"
     environment:
-      - N8N_HOST=localhost
+      - N8N_HOST=n8n.devfull.cl
       - N8N_PORT=5678
-      - N8N_PROTOCOL=http
-      - WEBHOOK_URL=${MY_NGROK_URL}
+      - N8N_PROTOCOL=https
+      - WEBHOOK_URL=https://n8n.devfull.cl/
       - GENERIC_TIMEZONE=America/Santiago
       - TZ=America/Santiago
       - N8N_RESTRICT_FILE_ACCESS_TO=/files
+      - N8N_SECURE_COOKIE=false
     volumes:
       - n8n_storage:/home/node/.n8n
       - ../backend-n8n/documentos:/files
+    networks:
+      - challenge_net
     depends_on:
       - qdrant
 
@@ -28,7 +37,25 @@ services:
       - "6333:6333"
     volumes:
       - qdrant_storage:/qdrant/storage
+    networks:
+      - challenge_net
+
+  caddy:
+    image: caddy:latest
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - challenge_net
 
 volumes:
   n8n_storage:
   qdrant_storage:
+  caddy_data:
+  caddy_config:
