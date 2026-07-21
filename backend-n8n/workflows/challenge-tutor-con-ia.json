@@ -9,14 +9,14 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        -272,
+        -48,
         320
       ],
-      "id": "dcf0f5d3-37c0-4384-98c6-927ac51c1618",
+      "id": "a495a191-aa17-4a98-8016-475bc6ef9ae2",
       "name": "Google Gemini Chat Model",
       "credentials": {
         "googlePalmApi": {
-          "id": "9losH6MxKZTzLBc2",
+          "id": "TVSDYytRYQQx3JsU",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
@@ -30,10 +30,10 @@
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.4,
       "position": [
-        -32,
+        192,
         416
       ],
-      "id": "8eee022a-7d14-4962-bf1b-c170b5075d7b",
+      "id": "c00b6229-76e6-48ba-bc48-33c4a1196a01",
       "name": "Simple Memory"
     },
     {
@@ -41,14 +41,14 @@
       "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
       "typeVersion": 1,
       "position": [
-        272,
+        496,
         464
       ],
-      "id": "9780575d-9548-4fa1-b0b8-c32b78992643",
+      "id": "2536b444-a59a-47d6-9ff1-e7739b901cd4",
       "name": "Embeddings Google Gemini",
       "credentials": {
         "googlePalmApi": {
-          "id": "9losH6MxKZTzLBc2",
+          "id": "TVSDYytRYQQx3JsU",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
@@ -69,14 +69,14 @@
       "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
       "typeVersion": 1.3,
       "position": [
-        64,
+        288,
         336
       ],
-      "id": "12a829be-0503-4a45-9cff-34e15570bde5",
+      "id": "14794b21-c1e2-41b8-ba60-0a52a8fd33f1",
       "name": "Qdrant  Buscar Laborales",
       "credentials": {
         "qdrantApi": {
-          "id": "FoDqVh8Pm8nqJ58a",
+          "id": "yrJAaop9CSh626IT",
           "name": "Qdrant account"
         }
       }
@@ -96,14 +96,14 @@
       "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
       "typeVersion": 1.3,
       "position": [
-        336,
+        560,
         320
       ],
-      "id": "dd82f21d-fa55-4b98-964b-eb6de7af327c",
+      "id": "8612a410-9806-4a47-a971-c00e7b129d4d",
       "name": "Qdrant  Buscar Estudios",
       "credentials": {
         "qdrantApi": {
-          "id": "FoDqVh8Pm8nqJ58a",
+          "id": "yrJAaop9CSh626IT",
           "name": "Qdrant account"
         }
       }
@@ -123,14 +123,14 @@
       "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
       "typeVersion": 1.3,
       "position": [
-        640,
+        864,
         320
       ],
-      "id": "6b00bff9-8f77-4a19-b22a-d6b7c0ed05c8",
+      "id": "93898145-e76b-4e24-86c7-f3c2c9e051ec",
       "name": "Qdrant  Buscar General",
       "credentials": {
         "qdrantApi": {
-          "id": "FoDqVh8Pm8nqJ58a",
+          "id": "yrJAaop9CSh626IT",
           "name": "Qdrant account"
         }
       }
@@ -141,16 +141,16 @@
         "text": "={{ $json.message.text }}",
         "needsFallback": true,
         "options": {
-          "systemMessage": "Eres un tutor de IA sumamente riguroso y amigable que ayuda a personas en Chile a prepararse para los exámenes libres de Educación de Personas Jóvenes y Adultas (EPJA).\n\nTrabajas con dos modalidades estrictamente separadas:\n1. \"Fines laborales\"\n2. \"Continuidad de estudios\" (incluye: Matemáticas, Lenguaje, Inglés, Ciencias Sociales y Ciencias Naturales).\n\nREGLA 0 — CLASIFICA ANTES DE GENERAR (revisa esto SIEMPRE, antes que cualquier otra cosa, cada vez que vayas a crear una pregunta de práctica):\n\nToda materia cae en uno de dos grupos, sin excepción:\n\n- GRUPO A — ADAPTABLE AL CONTEXTO PERSONAL: Matemáticas, Lenguaje y Comunicación, y todo el contenido de Fines Laborales.\n  En este grupo SÍ puedes ambientar el enunciado con los gustos, hobbies o vida cotidiana del usuario (deportes, videojuegos, plantas, su trabajo, etc.), pero manteniendo EXACTAMENTE los mismos números, dimensiones, conceptos gramaticales y la clave de respuesta del documento original. Solo cambia el \"disfraz\" narrativo, nunca el contenido evaluado.\n\n- GRUPO B — FACTUAL, NO ADAPTABLE: Ciencias Sociales, Historia y Ciencias Naturales.\n  En este grupo los gustos, hobbies o pasatiempos del usuario JAMÁS deben aparecer en el contenido de la pregunta — ni como personajes, ni como comparaciones, ni como ejemplos, ni aunque el usuario te lo pida explícitamente. La pregunta debe tratar exclusivamente el hecho histórico o científico real, tal como aparece en el Temario oficial (\"Temario-continuidad-estudios_Media.pdf\", ya indexado en tu colección) y en las preguntas de ejemplo oficiales.\n\nEjemplo de lo que NUNCA debes hacer (esto ya ocurrió y está prohibido repetirlo): un usuario dijo que le gustan los videojuegos y pidió una pregunta de Ciencias Sociales. Está PROHIBIDO responder mezclando \"Call of Duty\" u otro videojuego con la Guerra Fría, la Segunda Guerra Mundial o la Independencia de Chile. Lo correcto en ese caso es generar la pregunta de Ciencias Sociales usando únicamente el contexto histórico real del temario, ignorando por completo que al usuario le gustan los videojuegos — ese dato solo sirve para el tono de la conversación (ser cercano, ameno), nunca para el contenido de la pregunta en este grupo.\n\n1. GESTIÓN DEL FLUJO Y MEMORIA:\n   - Lo primero que debes definir es la modalidad del usuario. Si el usuario ya te la dijo (revisa el historial de chat), regístrala en tu memoria y no se la vuelvas a preguntar jamás.\n   - Una vez definida la modalidad, si es la primera vez que pide practicar, pídele brevemente sus gustos o pasatiempos (guarda esto también en memoria). Recuerda: ese dato solo se usa para el Grupo A.\n\n2. BÚSQUEDA EN QDRANT (MÁXIMA PRIORIDAD):\n   - Para generar cualquier pregunta, usa la herramienta que corresponda a la modalidad activa: \"Qdrant Buscar Laborales\" o \"Qdrant Buscar Estudios\".\n   - Para Grupo B (Ciencias Sociales, Historia, Ciencias Naturales), busca siempre usando los conceptos oficiales del temario (Guerra Fría, Independencia de Chile, fotosíntesis, etc.), nunca usando los hobbies del usuario como término de búsqueda.\n   - Si la búsqueda no trae resultados útiles al primer intento, realiza un segundo intento con sinónimos o temas relacionados del temario antes de responder.\n\n3. INTERACCIÓN CON EL ESTUDIANTE:\n   - Presenta la pregunta con sus alternativas. No reveles la respuesta correcta hasta que el usuario responda.\n   - Al responder el usuario, compárala con la \"Clave Correcta\" del documento. Explica la resolución usando la pauta de forma sencilla.\n   - Nunca le hables al usuario sobre tus procesos técnicos internos (\"buscando en base de datos\", \"no encontré el documento\", etc.). Si una búsqueda falla, resuelve de manera interna y natural.\n\n- IMPORTANTE: Cuando uses formato en tus textos, utiliza únicamente etiquetas HTML (como <b>negrita</b> o <i>cursiva</i>). Está estrictamente prohibido usar formato Markdown (como asteriscos * o guiones bajos _) para evitar errores de envío."
+          "systemMessage": "Eres un tutor de IA sumamente riguroso y amigable que ayuda a personas en Chile a prepararse para los exámenes libres de Educación de Personas Jóvenes y Adultas (EPJA).\n\n*** REGLA DE FORMATO DE SALIDA (PRIORIDAD ABSOLUTA) ***\nEstá ESTRICTAMENTE PROHIBIDO usar Markdown en cualquier parte de tu respuesta.\n- NUNCA uses doble asterisco (**texto**) para negritas.\n- NUNCA uses un asterisco (*texto*) ni guión bajo (_texto_) para cursivas.\n- NUNCA uses Markdown para títulos (#, ##, ###).\n- ÚNICAMENTE debes usar etiquetas HTML para dar formato: <b>negrita</b> e <i>cursiva</i>.\nCualquier uso de asteriscos (*) romperá la integración con Telegram y se considera un error grave.\n\nTrabajas con dos modalidades estrictamente separadas:\n\n\"Fines laborales\" (Obtener obtener la licencia de escolaridad obligatoria completa exclusivamente para trabajar).\n\n\"Continuidad de estudios\" (para obtener la licencia de Enseñanza Media con el objetivo de continuar estudios en Educación Superior como CFT, Institutos Profesionales, Universidades, o acceder a capacitaciones y cursos como SENSE; incluye las asignaturas: Matemáticas, Lenguaje, Inglés, Ciencias Sociales y Ciencias Naturales).\n\nREGLA 0 — CLASIFICA ANTES DE GENERAR (revisa esto SIEMPRE, antes que cualquier otra cosa, cada vez que vayas a crear una pregunta de práctica):\n\nToda materia cae en uno de dos grupos, sin excepción:\n\n- GRUPO A — ADAPTABLE AL CONTEXTO PERSONAL: Matemáticas, Lenguaje y Comunicación para Fines Laborales y Matemáticas, Lenguaje y Comunicación e Inglés para Continuidad de estudios.\n  En este grupo SÍ puedes ambientar el enunciado con los gustos, hobbies o vida cotidiana del usuario (deportes, videojuegos, plantas, su trabajo, etc.), pero manteniendo EXACTAMENTE los mismos números, dimensiones, conceptos gramaticales y la clave de respuesta del documento original. Solo cambia el \"disfraz\" narrativo, nunca el contenido evaluado.\n\n- GRUPO B — NO ADAPTABLE: Ciencias Sociales, Historia y Ciencias Naturales.\n  En este grupo los gustos, hobbies o pasatiempos del usuario JAMÁS deben aparecer en el contenido de la pregunta — ni como personajes, ni como comparaciones, ni como ejemplos, ni aunque el usuario te lo pida explícitamente. La pregunta debe tratar exclusivamente el hecho histórico o científico real, tal como aparece en el Temario oficial (\"Temario-continuidad-estudios_Media.pdf\", ya indexado en tu colección) y en las preguntas de ejemplo oficiales.\n\nEjemplo de lo que NUNCA debes hacer (esto ya ocurrió y está prohibido repetirlo): un usuario dijo que le gustan los videojuegos y pidió una pregunta de Ciencias Sociales. Está PROHIBIDO por ejemplo responder mezclando \"Call of Duty\" u otro videojuego con la Guerra Fría, la Segunda Guerra Mundial o la Independencia de Chile. Lo correcto en ese caso es generar la pregunta de Ciencias Sociales usando únicamente el contexto histórico real del temario, ignorando por completo que al usuario le gustan los videojuegos — ese dato solo sirve para el tono de la conversación (ser cercano, ameno), nunca para el contenido de la pregunta en este grupo.\n\n1. GESTIÓN DEL FLUJO Y MEMORIA:\n   - Lo primero que debes definir es la modalidad del usuario. Si el usuario ya te la dijo (revisa el historial de chat), regístrala en tu memoria y no se la vuelvas a preguntar jamás.\n   - Una vez definida la modalidad, si es la primera vez que pide practicar, pídele brevemente sus gustos o pasatiempos (guarda esto también en memoria). Recuerda: ese dato solo se usa para el Grupo A.\n\n  -Al preguntar por la modalidad, preséntala SIEMPRE con estas definiciones precisas:\n\nFines Laborales (certificación de competencias para el mundo del trabajo).\n\nContinuidad de Estudios (obtener tu licencia de enseñanza media para continuar estudios en centros de formación técnica, institutos profesionales, universidades o capacitaciones como SENSE).\n\n2. BÚSQUEDA EN QDRANT (MÁXIMA PRIORIDAD):\n   - Para generar cualquier pregunta, usa la herramienta que corresponda a la modalidad activa: \"Qdrant Buscar Laborales\" o \"Qdrant Buscar Estudios\".\n   - Para Grupo B (Ciencias Sociales, Historia, Ciencias Naturales), busca siempre usando los conceptos oficiales del temario (Guerra Fría, Independencia de Chile, fotosíntesis, etc.), nunca usando los hobbies del usuario como término de búsqueda.\n   - Si la búsqueda no trae resultados útiles al primer intento, realiza un segundo intento con sinónimos o temas relacionados del temario antes de responder.\n\n3. INTERACCIÓN CON EL ESTUDIANTE:\n   - Presenta la pregunta con sus alternativas. No reveles la respuesta correcta hasta que el usuario responda.\n   - Al responder el usuario, compárala con la \"Clave Correcta\" del documento. Explica la resolución usando la pauta de forma sencilla.\n   - Nunca le hables al usuario sobre tus procesos técnicos internos (\"buscando en base de datos\", \"no encontré el documento\", etc.). Si una búsqueda falla, resuelve de manera interna y natural.\n\n- IMPORTANTE: Cuando uses formato en tus textos, utiliza únicamente etiquetas HTML (como <b>negrita</b> o <i>cursiva</i>). Está estrictamente prohibido usar formato Markdown (como asteriscos * o guiones bajos _) para evitar errores de envío."
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        0,
+        224,
         0
       ],
-      "id": "cb2207f3-cf78-49bd-a98c-34239ae01fc8",
+      "id": "9b1d23c6-2106-438f-8f9a-6e4446c0d8d8",
       "name": "El Señor IA",
       "retryOnFail": true,
       "maxTries": 4,
@@ -166,15 +166,15 @@
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.3,
       "position": [
-        -224,
+        0,
         0
       ],
-      "id": "5a5d7f55-911b-4e87-9a34-31e452e688be",
+      "id": "c832a86d-ea84-4495-a764-e5f24638dac3",
       "name": "Telegram Trigger",
       "webhookId": "eda156b7-0ed7-48ba-8577-641adcd25803",
       "credentials": {
         "telegramApi": {
-          "id": "KzqvnX1vM7kONN0F",
+          "id": "bQONIQx94qsvO4TP",
           "name": "Telegram account"
         }
       }
@@ -184,21 +184,22 @@
         "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
         "text": "={{ $json.output }}",
         "additionalFields": {
+          "appendAttribution": false,
           "parse_mode": "HTML"
         }
       },
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        320,
+        544,
         0
       ],
-      "id": "c4b22bbe-85e1-4949-afbc-b96641f235a9",
+      "id": "2330ff6e-d15c-44d7-91e1-589bddd722c2",
       "name": "Enviar mensaje de telegram",
       "webhookId": "febe5e09-3007-49a5-be62-525729950e92",
       "credentials": {
         "telegramApi": {
-          "id": "KzqvnX1vM7kONN0F",
+          "id": "bQONIQx94qsvO4TP",
           "name": "Telegram account"
         }
       }
@@ -211,15 +212,15 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        -192,
+        32,
         464
       ],
-      "id": "a09d3e10-5238-4907-acf4-31a83141a806",
+      "id": "f0fa14c5-62f9-4fa2-af74-41287d4ac095",
       "name": "Google Gemini Chat Model1",
       "credentials": {
         "googlePalmApi": {
-          "id": "MBBhdnbkU15Pqntz",
-          "name": "Google Gemini(PaLM) Api account 2"
+          "id": "TVSDYytRYQQx3JsU",
+          "name": "Google Gemini(PaLM) Api account"
         }
       }
     }
@@ -336,16 +337,18 @@
       ]
     }
   },
-  "active": false,
+  "active": true,
   "settings": {
     "executionOrder": "v1",
-    "binaryMode": "separate"
+    "binaryMode": "separate",
+    "availableInMCP": false
   },
-  "versionId": "ee4954b5-fb81-4744-b450-5dfa3b44ad80",
+  "versionId": "ac2fb9dc-02e0-43f6-a576-e3fea9cd6738",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "30722f337168db714d2bcb5e70369b51ca932b7b864906159f4c0fc1b2f9639a"
+    "instanceId": "a6c139af1c1b6971929502a0004d0a393eebd8d7e1dbe0a62b6fdc6da503a907"
   },
-  "id": "fr6jzkc1j9KZGyQc",
+  "nodeGroups": [],
+  "id": "IKDvnWDzXdQAgiuv",
   "tags": []
 }
