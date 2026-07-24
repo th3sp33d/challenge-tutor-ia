@@ -5,6 +5,10 @@
 
 ### 🤖 [Prueba el bot aquí: @TutorConIAbot](https://t.me/TutorConIAbot)
 
+### 🎥 Video explicativo
+
+[![Ver demo en YouTube](https://img.youtube.com/vi/ydvh69EtmNE/maxresdefault.jpg)](https://youtu.be/ydvh69EtmNE)
+
 ---
 
 ## 📑 Tabla de contenidos
